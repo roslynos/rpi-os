@@ -1,0 +1,8 @@
+poky
+meta-roslynos
+
+build/*
+!build/conf
+build/conf/*
+!build/conf/local.conf
+!build/conf/site.conf

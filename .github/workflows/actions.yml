@@ -1,0 +1,34 @@
+name: Bitbake RoslynOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:  
+  build-roslynos:
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 1440
+    
+    steps:    
+      - name: Checkout repository
+        uses: actions/checkout@v3 
+      
+      - name: Setup build
+        shell: bash
+        run: ./run-build.sh init
+
+      - name: Run build
+        shell: bash
+        run: ./run-build.sh bake ${{ secrets.ARGS }}
+
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: | 
+            ./build/tmp/deploy/images/*/*.rootfs.*
+            ./build/tmp/deploy/images/*/*.env
+            ./build/tmp/buildstats/*
+          retention-days: 5
