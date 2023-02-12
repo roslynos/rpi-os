@@ -37,7 +37,6 @@ init() {
   bitbake-layers add-layer ../poky/meta-openembedded/meta-networking/
   
   bitbake bmap-tools-native -caddto_recipe_sysroot
-
 }
 
 bake() {
@@ -70,7 +69,7 @@ flash() {
   
   while [[ $# -gt 1 ]]; do    
     # ls "$2"? | xargs -n1 udisksctl unmount -b
-    
+    # sudo umount `lsblk --list | grep mmcblk0 | grep part | gawk '{ print $7 }' | tr '\n' ' '`
     sudo chmod 666 "$2" 
     oe-run-native \
       bmap-tools-native bmaptool copy \
@@ -87,6 +86,13 @@ flash() {
 
 update() {
   git fetch --all
+}
+
+packagelist() {
+  _source
+
+  bitbake -g "$1"
+  cat pn-buildlist | grep -v native | sort
 }
 
 _source() {
@@ -152,5 +158,9 @@ case $1 in
   update)
     shift
     update "$@"
+    ;;
+  packagelist)
+    shift
+    packagelist "$@"
     ;;
 esac

@@ -1,4 +1,8 @@
 {
+	"extensions": {    
+		"recommendations": [
+        	"EugenWiens.bitbake"
+    ]},
 	"folders": [
 		{
 			"path": "."
